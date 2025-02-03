@@ -1,0 +1,36 @@
+name: Run Factorial Script
+
+on:
+  push:
+    branches:
+      - main  # This triggers the action when a push is made to the main branch
+  pull_request:
+    branches:
+      - main  # To trigger the action when a pull request is made to the main branch
+  workflow_dispatch:  # Allows manual trigger of action and provides input
+    inputs:
+      number_input:
+        description: "Enter a number to calculate the factorial"
+        required: true
+        type: string
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest  # The runner is ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3  # To check out the code
+
+    - name: Make factorial.sh executable
+      run: chmod +x factorial.sh  # To ensure factorial.sh is executable
+
+    - name: Run Factorial Script
+      run: |
+        # Run factorial.sh with the input number from the manual trigger
+        output=$(./factorial.sh "${{ github.event.inputs.number_input }}")
+        
+        # Output the result to the workflow logs
+        echo "The factorial result is: $output"
+
+
